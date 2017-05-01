@@ -19,8 +19,7 @@ class UserController extends Controller
 
     public function index()
     {
-       return \Response::json($this->userRepository->lists());
-        
+        return \Response::json($this->userRepository->lists());
     }
 
     public function show($user)

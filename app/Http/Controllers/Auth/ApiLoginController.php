@@ -13,7 +13,6 @@ use Illuminate\Http\Response;
 
 class ApiLoginController extends Controller
 {
-
     private $client;
 
     public function __construct()
@@ -21,7 +20,8 @@ class ApiLoginController extends Controller
         $this->client = DB::table('oauth_clients')->where('id', 2)->first();
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $request->request->add([
             'client_id' => $this->client->id,
             'client_secret' => $this->client->secret,

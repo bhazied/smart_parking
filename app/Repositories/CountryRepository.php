@@ -8,12 +8,10 @@
 
 namespace App\Repositories;
 
-
 use App\Repositories\Contracts\BaseRepository;
 
 class CountryRepository extends BaseRepository
 {
-
     protected function model()
     {
         return 'App\Model\Country';

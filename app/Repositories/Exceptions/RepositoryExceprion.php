@@ -8,12 +8,9 @@
 
 namespace App\Repositories\Exceptions;
 
-
 use Mockery\CountValidator\Exception;
 use Prophecy\Exception\Doubler\ClassNotFoundException;
 
 class RepositoryExceprion extends Exception
 {
-
-
 }

@@ -15,10 +15,9 @@ class CountryController extends Controller
      */
     public function index($id = null)
     {
-        if(is_null($id)){
+        if (is_null($id)) {
             return Country::orderBy('id', 'asc')->get();
-        }
-        else {
+        } else {
             return $this->show($id);
         }
     }

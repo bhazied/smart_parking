@@ -8,31 +8,25 @@
 
 namespace App\Repositories\Contracts;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 interface IRepository
 {
+    public function create(array $attributes);
 
-    public function create();
+    public function update(array $attributes, $value, $field);
 
-    public function update();
-
-    public  function lists($columns=['*']);
-
-    public function get();
+    public function lists($columns=['*']);
 
     public function delete($id);
 
     public function find($id, $columns=['*']);
 
-    public function findBy($fields, $columns = ['*']);
+    public function findBy($field, $value, $columns = ['*']);
 
-    //public function findWhere(array $where, $columns = ['*']);
+    public function findWhere(array $where, $columns = ['*']);
 
-    //public function deleteWhere(array $where);
+    public function deleteWhere(array $where);
 
     public function with($relations);
-
-
 }

@@ -14,7 +14,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 
-/*$factory->define(App\Model\Country::class, function (Faker\Generator $faker) {
+$factory->define(App\Model\Country::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
@@ -25,7 +25,7 @@
         'picture' => $faker->image()
     ];
 });
-*/
+
 
 $factory->define(App\Model\User::class, function (Faker\Generator $faker) {
     static $password;
@@ -38,4 +38,3 @@ $factory->define(App\Model\User::class, function (Faker\Generator $faker) {
         'country_id' => 2
     ];
 });
-

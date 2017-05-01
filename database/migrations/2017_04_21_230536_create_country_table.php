@@ -15,7 +15,7 @@ class CreateCountryTable extends Migration
     {
         //create countries table
         
-        Schema::create('countries', function(Blueprint $table){
+        Schema::create('countries', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('code')->unique();
@@ -35,6 +35,5 @@ class CreateCountryTable extends Migration
     {
         //Drop table Countries
         Schema::drop('countries');
-
     }
 }

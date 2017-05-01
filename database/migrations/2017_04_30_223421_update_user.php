@@ -14,12 +14,11 @@ class UpdateUser extends Migration
     public function up()
     {
         if (Schema::hasTable('users')) {
-            Schema::table('users', function(Blueprint $table){
+            Schema::table('users', function (Blueprint $table) {
                 $table->integer('country_id')->unsigned();
                 $table->foreign('country_id')->references('id')->on('countries');
             });
         }
-
     }
 
     /**
@@ -29,7 +28,7 @@ class UpdateUser extends Migration
      */
     public function down()
     {
-        Schema::table('users', function(Blueprint $table){
+        Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('country_id');
         });
     }

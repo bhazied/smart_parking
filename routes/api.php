@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,19 +15,18 @@ use \Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    
     return $request->user();
 });
 
-Route::group(['middleware' => 'auth:api'], function(){
-    Route::get('/test', function(Request $request){
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('/test', function (Request $request) {
         return response()->json([1,2,3,4,5]);
     });
-    Route::get('/user', function(Request $request){
+    Route::get('/user', function (Request $request) {
         return $request->user()->with('country')->find($request->user()->id);
     });
 });
-Route::get('/test1', function(){
+Route::get('/test1', function () {
     return response()->json([1,2,3,4,5]);
 });
 Route::post('/login', 'Auth\ApiLoginController@login');

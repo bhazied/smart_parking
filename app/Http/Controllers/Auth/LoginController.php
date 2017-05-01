@@ -40,11 +40,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function ApiLogin(Request $request){
-
+    public function ApiLogin(Request $request)
+    {
     }
 
-    public function ApiRefreshToken(Request $request){
-
+    public function ApiRefreshToken(Request $request)
+    {
     }
 }

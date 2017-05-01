@@ -8,15 +8,12 @@
 
 namespace App\Repositories;
 
-
 use App\Repositories\Contracts\BaseRepository;
 
 class UserRepository extends BaseRepository
 {
-
     public function model()
     {
         return '\App\Model\User';
     }
-
 }

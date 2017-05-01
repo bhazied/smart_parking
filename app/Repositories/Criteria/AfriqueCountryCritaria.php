@@ -8,13 +8,11 @@
 
 namespace App\Repositories\Criteria;
 
-
 use App\Repositories\Contracts\Criteria;
 use App\Repositories\Contracts\IRepository;
 
 class AfriqueCountryCritaria extends Criteria
 {
-
     public function apply($model, IRepository $repository)
     {
         $model = $model->where('id', '>', 270);

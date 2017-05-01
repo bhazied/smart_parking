@@ -6,7 +6,7 @@
  * Time: 16:13
  */
 
-namespace app\Repositories\Contracts;
+namespace App\Repositories\Contracts;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -14,15 +14,25 @@ use Illuminate\Database\Eloquent\Model;
 interface IRepository
 {
 
-    public function create(Model $entity);
+    public function create();
 
-    public function update(Model $entity, $params = []);
+    public function update();
 
-    public  function getAll($params = []);
+    public  function lists($columns=['*']);
 
-    public function get($params = []);
+    public function get();
 
-    public function delete(Model $entity);
+    public function delete($id);
+
+    public function find($id, $columns=['*']);
+
+    public function findBy($fields, $columns = ['*']);
+
+    //public function findWhere(array $where, $columns = ['*']);
+
+    //public function deleteWhere(array $where);
+
+    public function with($relations);
 
 
 }

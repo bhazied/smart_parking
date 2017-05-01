@@ -32,13 +32,7 @@ class ApiLoginController extends Controller
         ]);
 
         $proxy = Request::create('oauth/token', 'POST');
-        //return Route::dispatch($proxy);
         $response =  Route::dispatch($proxy);
-        $response_array = (array)json_decode($response->getContent());
-        $user = \App\User::find(1);
-        $response_array['user'] = $request->username;
-        $response->setContent(json_encode($response_array));
         return $response;
-
     }
 }

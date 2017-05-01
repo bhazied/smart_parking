@@ -8,11 +8,9 @@
 
 namespace App\Repositories\Contracts;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 abstract class Criteria
 {
-
     abstract public function apply($model, IRepository $repository);
 }

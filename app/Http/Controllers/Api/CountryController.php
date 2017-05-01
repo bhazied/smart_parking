@@ -41,8 +41,7 @@ class CountryController extends Controller
 
     public function destroy($id)
     {
-        if($this->countryRepository->delete($id))
-        {
+        if ($this->countryRepository->delete($id)) {
             return ['status' => true, "message" => "deleted with success"];
         }
         return ['status' => false, "message" => "not deleted"];

@@ -9,11 +9,17 @@
 namespace App\Repositories;
 
 use App\Repositories\Contracts\BaseRepository;
+use App\Repositories\Criteria\AfriqueCountryCritaria;
 
 class CountryRepository extends BaseRepository
 {
     protected function model()
     {
         return 'App\Model\Country';
+    }
+
+    public function initRepository()
+    {
+        $this->pushCriteria(AfriqueCountryCritaria::class);
     }
 }

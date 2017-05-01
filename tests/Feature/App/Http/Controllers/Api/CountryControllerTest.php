@@ -15,9 +15,8 @@ class CountryControllerTest extends TestCase
     use WithoutMiddleware;
     //use DatabaseMigrations;
 
-    public function test_index_action_countries  ()
+    public function test_index_action_countries()
     {
         $this->get(route('countries.index'))->assertStatus(200);
     }
-
 }

@@ -33,7 +33,7 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     /**
      * @var bool
      */
-    protected $skipAllCriteria = true;
+    protected $skipAllCriteria = false;
 
     /**
      * BaseRepository constructor.
@@ -55,7 +55,6 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     public function initRepository()
     {
-
     }
 
     /**
@@ -98,12 +97,10 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     public function pushCriteria($criteria)
     {
-        if(is_string($criteria))
-        {
+        if (is_string($criteria)) {
             $criteria = new $criteria;
         }
-        if(! $criteria instanceof Criteria)
-        {
+        if (! $criteria instanceof Criteria) {
             throw new RepositoryExceprion('the class '. get_class($criteria) . ' is not an instance off App\\Contract\\Criteria');
         }
         $this->criteria->push($criteria);
@@ -114,15 +111,12 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     public function applyCriteria()
     {
-        if($this->skipAllCriteria === true)
-        {
+        if ($this->skipAllCriteria === true) {
             return $this;
         }
         $criteria = $this->getCriteria();
-        if($criteria)
-        {
-            foreach ($criteria as $condition)
-            {
+        if ($criteria) {
+            foreach ($criteria as $condition) {
                 $this->model = $condition->apply($this->model, $this);
             }
         }
@@ -184,7 +178,6 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     public function update(array $attributes, $value, $field)
     {
         return $this->model->where($field, '=', $value)->update($attributes);
-
     }
 
 
@@ -252,7 +245,7 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     public function findBy($field, $value, $columns = ['*'])
     {
         $this->applyCriteria();
-        return $this->model->where($field , ' = ' , $value)->get($columns);
+        return $this->model->where($field, ' = ', $value)->get($columns);
     }
 
     /**
@@ -260,15 +253,11 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     public function applyCondition(array $where)
     {
-        foreach ($where as $filed => $value)
-        {
-            if(is_array($value))
-            {
+        foreach ($where as $filed => $value) {
+            if (is_array($value)) {
                 list($filed, $condition, $val) = $value;
                 $this->model->where($filed, $condition, $val);
-            }
-            else
-            {
+            } else {
                 $this->model->where($filed, '=', $value);
             }
         }

@@ -8,10 +8,8 @@
 
 namespace App\Repositories\Contracts;
 
-
 interface IRepositoryCriteria
 {
-
     public function skipCriteria($status = true);
 
     public function getCriteria();

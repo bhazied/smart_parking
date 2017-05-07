@@ -36,6 +36,11 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     protected $skipAllCriteria = false;
 
     /**
+     * @var \Closure
+     */
+    protected $scopeQuery;
+
+    /**
      * BaseRepository constructor.
      * @param App $application
      */
@@ -143,6 +148,28 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
             $with = $relations;
         }
         $this->model->with($with);
+        return $this;
+    }
+
+
+    public function scopeQuery(\Closure $scope)
+    {
+        $this->scopeQuery = $scope;
+        return $this;
+    }
+
+    public function resetScope()
+    {
+        $this->scopeQuery = null;
+        return $this;
+    }
+
+    public function applyScope()
+    {
+        if (isset($this->scopeQuery) && is_callable($this->scopeQuery)) {
+            $callback = $this->scopeQuery;
+            $this->model = $callback($this->model);
+        }
         return $this;
     }
 

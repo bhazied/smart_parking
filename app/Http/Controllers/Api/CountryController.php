@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Repositories\Contracts\IRepository;
-use App\Repositories\CountryRepository;
+use App\Repositories\CountryRepository as Repository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -12,7 +11,7 @@ class CountryController extends Controller
 {
     private $countryRepository;
 
-    public function __construct(CountryRepository $countryRepository)
+    public function __construct(Repository $countryRepository)
     {
         $this->countryRepository = $countryRepository;
     }

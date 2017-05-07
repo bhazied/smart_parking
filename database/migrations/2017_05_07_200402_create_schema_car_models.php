@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCountryTable extends Migration
+class CreateSchemaCarModels extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,15 @@ class CreateCountryTable extends Migration
      */
     public function up()
     {
-        //create countries table
-        if (!Schema::hasTable('countries')) {
-            Schema::create('countries', function (Blueprint $table) {
+        if (!Schema::hasTable('car_models')) {
+            Schema::create('car_models', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('name')->unique();
-                $table->string('code')->unique();
-                $table->string('long_code');
-                $table->string('prefix');
-                $table->string('picture');
+                $table->string('name');
+                $table->integer('car_brand_id')->unsigned()->index()->nullable();
                 $table->integer('creator_user_id')->unsigned()->index()->nullable();
                 $table->integer('modifier_user_id')->unsigned()->index()->nullable();
                 $table->timestamps();
+                $table->foreign('car_brand_id')->references('id')->on('car_brands')->onDelete('set null');
                 $table->foreign('creator_user_id')->references('id')->on('users')->onDelete('set null');
                 $table->foreign('modifier_user_id')->references('id')->on('users')->onDelete('set null');
             });
@@ -38,12 +35,13 @@ class CreateCountryTable extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable('countries')) {
-            Schema::table('countries', function (Blueprint $table) {
-                $table->dropForeign('countries_creator_user_id_foreign');
-                $table->dropForeign('countries_modifier_user_id_foreign');
+        if (Schema::hasTable('car_models')) {
+            Schema::table('car_models', function (Blueprint $table) {
+                $table->dropForeign('car_models_car_brand_id_foreign');
+                $table->dropForeign('car_models_creator_user_id_foreign');
+                $table->dropForeign('car_models_modifier_user_id_foreign');
             });
         }
-        Schema::drop('countries');
+        Schema::dropIfExists('car_models');
     }
 }

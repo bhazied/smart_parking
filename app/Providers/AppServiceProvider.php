@@ -27,8 +27,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(UserRepository::class, UserRepository::class);
-        $this->app->bind(CountryRepository::class, CountryRepository::class);
-        //$this->app->bind(IRepository::class);
     }
 }

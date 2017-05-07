@@ -29,4 +29,8 @@ interface IRepository
     public function deleteWhere(array $where);
 
     public function with($relations);
+
+    public function scopeQuery(\Closure $scope);
+
+    public function resetScope();
 }

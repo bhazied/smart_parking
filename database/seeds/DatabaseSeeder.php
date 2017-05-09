@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,10 +12,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //$this->call(UsersTableSeeder::class);
+        $country = DB::table('countries')->insert([
+            'name' => 'Italie',
+            'code' => 'IT',
+            'long_code' => 'ITA',
+            'prefix' => str_random(2),
+            'picture' => 'Italie.png'
+        ]);
 
-        //$country = factory(\App\Model\Country::class, 100)->create();
-
-        $user = factory(\App\Model\User::class, 10)->create(['country_id' => 200]);
+        for ($i=0; $i<10; $i++) {
+            DB::table('users')->insert([
+                'name' => str_random(10),
+                'email' => str_random(10).'@gmail.com',
+                'password' =>  bcrypt('secret'),
+                'remember_token' => str_random(10),
+                'country_id' => rand(1, 3)
+            ]);
+        }
     }
 }

@@ -32,4 +32,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Model\Country');
     }
+    
+    public function cars()
+    {
+        return $this->hasMany('App\Model\Car', 'creator_user_id');
+    }
 }

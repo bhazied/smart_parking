@@ -4,13 +4,13 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Region extends Model
+class State extends Model
 {
     public $fillable = ['*'];
 
-    public function states()
+    public function region()
     {
-        return $this->hasMany('App\Model\State');
+        return $this->belongsTo('App\Model\Region');
     }
 
     public function country()

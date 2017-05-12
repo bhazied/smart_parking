@@ -109,6 +109,7 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
             throw new RepositoryExceprion('the class '. get_class($criteria) . ' is not an instance off App\\Contract\\Criteria');
         }
         $this->criteria->push($criteria);
+        return $this;
     }
 
     /**

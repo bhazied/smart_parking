@@ -15,4 +15,14 @@ class Country extends Model
     {
         return $this->hasMany('App\Model\User');
     }
+    
+    public function regions()
+    {
+        return $this->hasMany('App\Model\Region');
+    }
+
+    public function states()
+    {
+        return $this->hasMany('App\Model\State');
+    }
 }

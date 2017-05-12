@@ -14,12 +14,12 @@ class Car extends Model
 
     public function carBrand()
     {
-        return $this->belongsTo('App\Model\CarBrand');
+        return $this->belongsTo('App\Model\CarBrand', 'car_brand_id');
     }
 
     public function carModel()
     {
-        return $this->belongsTo('App\Model\CarModel');
+        return $this->belongsTo('App\Model\CarModel', 'car_model_id');
     }
 
     public function user()

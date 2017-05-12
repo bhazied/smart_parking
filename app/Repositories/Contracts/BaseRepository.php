@@ -143,12 +143,7 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     public function with($relations)
     {
-        if (is_array($relations)) {
-            $with = implode(',', $relations);
-        } else {
-            $with = $relations;
-        }
-        $this->model->with($with);
+        $this->model->with($relations);
         return $this;
     }
 

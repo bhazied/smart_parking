@@ -8,8 +8,15 @@ class CarModel extends Model
 {
     public $fillable = ['*'];
 
+    public $table = 'car_models';
+
     public function cars()
     {
-        $this->hasMany('App\Model\Car');
+        return $this->hasMany('App\Model\Car');
+    }
+
+    public function carBrand()
+    {
+        return $this->belongsTo('App\Mode\CarBrand', 'car_brand_id');
     }
 }

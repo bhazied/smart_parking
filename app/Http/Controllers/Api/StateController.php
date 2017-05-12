@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Model\State;
+use App\Repositories\StateRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 
 class StateController extends Controller
 {
+    protected $stateRepository;
+
+    public function __construct(StateRepository $stateRepository)
+    {
+        $this->stateRepository = $stateRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,19 +24,9 @@ class StateController extends Controller
      */
     public function index()
     {
-        //
+        return $this->stateRepository->with(['country', 'region'])->lists();
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +35,7 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return $this->stateRepository->create($request->all());
     }
 
     /**
@@ -46,18 +46,7 @@ class StateController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->stateRepository->find($id);
     }
 
     /**
@@ -69,7 +58,7 @@ class StateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->stateRepository->update($request->all(), $id, 'id');
     }
 
     /**
@@ -80,6 +69,9 @@ class StateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->stateRepository->delete($id)) {
+            return ['status' => true, "message" => "deleted with success"];
+        }
+        return ['status' => false, "message" => "not deleted"];
     }
 }

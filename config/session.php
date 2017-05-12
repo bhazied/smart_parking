@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'cookie' => 'laravel_session',
+    'cookie' => 'smart_parking_session',
 
     /*
     |--------------------------------------------------------------------------

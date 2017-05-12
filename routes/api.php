@@ -18,17 +18,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('/test', function (Request $request) {
-        return response()->json([1,2,3,4,5]);
-    });
+Route::group(['middleware' => ['auth:api', 'checkIp']], function () {
     Route::get('/user', function (Request $request) {
         return $request->user()->with('country')->find($request->user()->id);
     });
+    Route::resource('users', 'Api\UserController');
+    Route::resource('cars', 'Api\CarController');
 });
-Route::get('/test1', function () {
-    return response()->json([1,2,3,4,5]);
-});
+
 Route::post('/login', 'Auth\ApiLoginController@login');
-Route::resource('users', 'Api\UserController');
 Route::resource('countries', 'Api\CountryController');
+Route::resource('states', 'Api\StateController');
+Route::resource('regions', 'Api\RegionController');
+Route::resource('languages', 'Api\LanguageController');
+Route::resource('parkings', 'Api\ParkingController');
+Route::resource('car_bodies', 'Api\CarBodyController');
+Route::resource('car_models', 'Api\CarModelController');
+Route::resource('car_brands', 'Api\CarBrandController');

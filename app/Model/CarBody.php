@@ -8,8 +8,10 @@ class CarBody extends Model
 {
     public $fillable = ['*'];
     
+    public $table = 'car_bodies';
+    
     public function cars()
     {
-        $this->hasMany('App\Model\Car');
+        return $this->hasMany('App\Model\Car');
     }
 }

@@ -20,6 +20,6 @@ class CountryRepository extends BaseRepository
 
     public function initRepository()
     {
-        $this->pushCriteria(AfriqueCountryCritaria::class);
+        //$this->pushCriteria(AfriqueCountryCritaria::class);
     }
 }

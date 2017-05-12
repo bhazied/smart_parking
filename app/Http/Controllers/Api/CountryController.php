@@ -19,8 +19,7 @@ class CountryController extends Controller
 
     public function index()
     {
-        $coutries = $this->countryRepository->with('users')->lists();
-        return $coutries;
+        return $this->countryRepository->with('users')->lists();
     }
 
     public function show($country)

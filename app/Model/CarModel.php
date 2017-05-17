@@ -17,6 +17,6 @@ class CarModel extends Model
 
     public function carBrand()
     {
-        return $this->belongsTo('App\Mode\CarBrand', 'car_brand_id');
+        return $this->belongsTo('App\Model\CarBrand', 'car_brand_id');
     }
 }

@@ -23,15 +23,15 @@ Route::group(['middleware' => ['auth:api', 'checkIp']], function () {
         return $request->user()->with('country')->find($request->user()->id);
     });
     Route::resource('users', 'Api\UserController');
-    Route::resource('cars', 'Api\CarController');
 });
 
 Route::post('/login', 'Auth\ApiLoginController@login');
-Route::resource('countries', 'Api\CountryController');
-Route::resource('states', 'Api\StateController');
-Route::resource('regions', 'Api\RegionController');
-Route::resource('languages', 'Api\LanguageController');
-Route::resource('parkings', 'Api\ParkingController');
-Route::resource('car_bodies', 'Api\CarBodyController');
-Route::resource('car_models', 'Api\CarModelController');
-Route::resource('car_brands', 'Api\CarBrandController');
+Route::resource('cars', 'Api\CarController');
+Route::resource('countries', 'Api\CountryController', ['except' => ['create', 'edit']]);
+Route::resource('states', 'Api\StateController', ['except' => ['create', 'edit']]);
+Route::resource('regions', 'Api\RegionController', ['except' => ['create', 'edit']]);
+Route::resource('languages', 'Api\LanguageController', ['except' => ['create', 'edit']]);
+Route::resource('parkings', 'Api\ParkingController', ['except' => ['create', 'edit']]);
+Route::resource('car_bodies', 'Api\CarBodyController', ['except' => ['create', 'edit']]);
+Route::resource('car_models', 'Api\CarModelController', ['except' => ['create', 'edit']]);
+Route::resource('car_brands', 'Api\CarBrandController', ['except' => ['create', 'edit']]);

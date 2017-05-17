@@ -40,6 +40,8 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     protected $scopeQuery;
 
+    private $keyName;
+
     /**
      * BaseRepository constructor.
      * @param App $application
@@ -175,7 +177,7 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     public function getModel()
     {
         $model = $this->application->make($this->model());
-
+        $this->keyName = $model->getKeyName();
         if (!$model instanceof Model) {
             throw new RepositoryExceprion('the class '. $this->model() . ' is not an instance off Illuminate\\Database\\Eloquent\\Model');
         }
@@ -284,5 +286,10 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
                 $this->model->where($filed, '=', $value);
             }
         }
+    }
+
+    public function getModelKeyName()
+    {
+        return $this->keyName;
     }
 }

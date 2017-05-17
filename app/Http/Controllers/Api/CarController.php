@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\CarRequest;
+use App\Repositories\CarRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
 
 class CarController extends Controller
 {
+
+    /**
+     * @var CarRepository
+     */
+    private $carRepository;
+
+    public function __construct(CarRepository $carRepository)
+    {
+        $this->carRepository = $carRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +28,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        //
+        return Response::json($this->carRepository->with(['carBrand', 'carModel', 'user'])->lists());
     }
 
     /**
@@ -30,12 +44,12 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  CarRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CarRequest $request)
     {
-        //
+        return Response::json($this->carRepository->create($request->all()));
     }
 
     /**
@@ -46,7 +60,7 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        //
+        return Response::json($this->carRepository->with(['carBrand', 'carModel', 'user'])->find($id));
     }
 
     /**
@@ -63,13 +77,13 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  CarRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CarRequest $request, $id)
     {
-        //
+        return Response::json($this->carRepository->update($request->all(), $id, 'id'));
     }
 
     /**
@@ -80,6 +94,9 @@ class CarController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->carRepository->delete($id)) {
+            return ['status' => true, "message" => "deleted with success"];
+        }
+        return ['status' => false, "message" => "not deleted"];
     }
 }

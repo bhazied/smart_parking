@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Region extends Model
 {
-    public $fillable = ['*'];
+    protected $guarded = [];
 
     public function states()
     {

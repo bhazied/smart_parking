@@ -2,11 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\CarBodyRequest;
+use App\Repositories\CarBodyRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class CarBodyController extends Controller
 {
+
+    /**
+     * @var CarBodyRepository
+     */
+    private $carBodyRepository;
+
+    public function __construct(CarBodyRepository $carBodyRepository)
+    {
+        $this->carBodyRepository = $carBodyRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +27,7 @@ class CarBodyController extends Controller
      */
     public function index()
     {
-        //
+        return $this->carBodyRepository->with(['cars'])->lists();
     }
 
     /**
@@ -33,9 +46,9 @@ class CarBodyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CarBodyRequest $request)
     {
-        //
+        return $this->carBodyRepository->create($request->all());
     }
 
     /**
@@ -46,7 +59,7 @@ class CarBodyController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->carBodyRepository->find($id);
     }
 
     /**
@@ -67,9 +80,9 @@ class CarBodyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CarBodyRequest $request, $id)
     {
-        //
+        return $this->carBodyRepository->update($request->all(), $id, 'id');
     }
 
     /**
@@ -80,6 +93,9 @@ class CarBodyController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->carBodyRepository->delete($id)) {
+            return ['status' => true, "message" => "deleted with success"];
+        }
+        return ['status' => false, "message" => "not deleted"];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\StateRequest;
 use App\Model\State;
 use App\Repositories\StateRepository;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class StateController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StateRequest $request)
     {
         return $this->stateRepository->create($request->all());
     }
@@ -56,7 +57,7 @@ class StateController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StateRequest $request, $id)
     {
         return $this->stateRepository->update($request->all(), $id, 'id');
     }

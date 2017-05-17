@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CarBrandRequest;
+use App\Repositories\CarBrandRepository;
 use App\Http\Controllers\Controller;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class CarBrandController extends Controller
 {
+    /**
+     * @var CarBrandRepository
+     */
+    private $carBrandRepository;
+
+    public function __construct(CarBrandRepository $carBrandRepository)
+    {
+        $this->carBrandRepository = $carBrandRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,7 @@ class CarBrandController extends Controller
      */
     public function index()
     {
-        //
+        return $this->carBrandRepository->lists();
     }
 
     /**
@@ -33,9 +45,9 @@ class CarBrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CarBrandRequest $request)
     {
-        //
+        return $this->carBrandRepository->create($request->all());
     }
 
     /**
@@ -46,7 +58,7 @@ class CarBrandController extends Controller
      */
     public function show($id)
     {
-        //
+        return $this->carBrandRepository->find($id);
     }
 
     /**
@@ -67,9 +79,9 @@ class CarBrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CarBrandRequest $request, $id)
     {
-        //
+        return $this->carBrandRepository->update($request->all(), $id, 'id');
     }
 
     /**
@@ -80,6 +92,9 @@ class CarBrandController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->carBrandRepository->delete($id)) {
+            return ['status' => true, "message" => "deleted with success"];
+        }
+        return ['status' => false, "message" => "not deleted"];
     }
 }

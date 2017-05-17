@@ -2,11 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\ParkingRequest;
+use App\Repositories\ParkingRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ParkingController extends Controller
 {
+
+    /**
+     * @var ParkingRepository
+     */
+    private $parkingRepository;
+
+    public function __construct(ParkingRepository $parkingRepository)
+    {
+        $this->parkingRepository = $parkingRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,17 +27,7 @@ class ParkingController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->parkingRepository->with(['states', 'regions'])->lists();
     }
 
     /**
@@ -33,9 +36,9 @@ class ParkingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ParkingRequest $request)
     {
-        //
+        return $this->parkingRepository->create($request->all());
     }
 
     /**
@@ -46,18 +49,7 @@ class ParkingController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->parkingRepository->with(['states', 'regions'])->find($id);
     }
 
     /**
@@ -67,9 +59,9 @@ class ParkingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ParkingRequest $request, $id)
     {
-        //
+        return $this->parkingRepository->update($request->all(), $id, 'id');
     }
 
     /**
@@ -80,6 +72,9 @@ class ParkingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if ($this->parkingRepository->delete($id)) {
+            return ['status' => true, "message" => "deleted with success"];
+        }
+        return ['status' => false, "message" => "not deleted"];
     }
 }

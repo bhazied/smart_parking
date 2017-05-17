@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\LanguageRequest;
+use App\Repositories\LanguageRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class LanguageController extends Controller
 {
+    private $languageRepositiry;
+
+    public function __construct(LanguageRepository $languageRepository)
+    {
+        $this->languageRepositiry = $languageRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,18 +23,9 @@ class LanguageController extends Controller
      */
     public function index()
     {
-        //
+        return $this->languageRepositiry->lists();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -33,9 +33,9 @@ class LanguageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LanguageRequest $request)
     {
-        //
+        return $this->languageRepositiry->create($request->all());
     }
 
     /**
@@ -46,18 +46,7 @@ class LanguageController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->languageRepositiry->find($id);
     }
 
     /**
@@ -69,7 +58,7 @@ class LanguageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->languageRepositiry->update($request->all(), $id, 'id');
     }
 
     /**
@@ -80,6 +69,6 @@ class LanguageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->languageRepositiry->delete($id);
     }
 }

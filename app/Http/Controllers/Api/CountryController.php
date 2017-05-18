@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\countryRequest;
-use App\Repositories\CountryRepository as Repository;
-use Illuminate\Http\Request;
+use App\Http\Requests\CountryRequest;
+use App\Jobs\ImageJob;
+use App\Repositories\CountryRepository;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
+use Intervention\Image\Facades\Image;
 
 /**
  * Class CountryController
@@ -24,7 +25,7 @@ class CountryController extends Controller
      * CountryController constructor.
      * @param Repository $countryRepository
      */
-    public function __construct(Repository $countryRepository)
+    public function __construct(CountryRepository $countryRepository)
     {
         $this->countryRepository = $countryRepository;
     }
@@ -48,12 +49,21 @@ class CountryController extends Controller
     }
 
     /**
-     * @param countryRequest $request
+     * @param CountryRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(CountryRequest $request)
     {
-        return Response::json($this->countryRepository->create($request->all()));
+        $country = $this->countryRepository->create($request->all());
+
+        if ($request->hasFile('picture')) {
+            $image = $request->file('picture');
+            $file = $image->move(public_path('uploads/countries'), $image->getClientOriginalName());
+            $imageJob = new ImageJob($file->getRealPath(), 'Country', $country);
+            $imageJob->delay(Carbon::now()->addSecond(10));
+            $this->dispatch($imageJob);
+        }
+        return Response::json($country);
     }
 
     /**
@@ -63,7 +73,7 @@ class CountryController extends Controller
      */
     public function update(CountryRequest $request, $id)
     {
-        return Response::json($this->countryRepository->update($request->all(), $id, 'id'));
+        return $this->getUpdateResponse($this->countryRepository->update($request->all(), $id, 'id'), 'Country');
     }
 
     /**
@@ -72,9 +82,6 @@ class CountryController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->countryRepository->delete($id)) {
-            return ['status' => true, "message" => "deleted with success"];
-        }
-        return ['status' => false, "message" => "not deleted"];
+        return $this->getDestroyResponse($this->countryRepository->delete($id), 'Country');
     }
 }

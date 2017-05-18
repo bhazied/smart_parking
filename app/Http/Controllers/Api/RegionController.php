@@ -81,7 +81,11 @@ class RegionController extends Controller
      */
     public function update(RegionRequest $request, $id)
     {
-        return $this->regionrpository->update($request->all(), $id, $this->regionrpository->getModelKeyName());
+        return $this->getUpdateResponse(
+            $this->regionrpository->update($request->all(), $id, $this->regionrpository->getModelKeyName()),
+            'Region'
+        );
+        //return $this->regionrpository->update($request->all(), $id, $this->regionrpository->getModelKeyName());
     }
 
     /**
@@ -92,9 +96,13 @@ class RegionController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->regionrpository->delete($id)) {
+        return $this->getDestroyResponse(
+            $this->regionrpository->delete($id),
+            'Region'
+        );
+        /*if ($this->regionrpository->delete($id)) {
             return ['status' => true, "message" => "deleted with success"];
         }
-        return ['status' => false, "message" => "not deleted"];
+        return ['status' => false, "message" => "not deleted"];*/
     }
 }

@@ -22,11 +22,11 @@ Route::group(['middleware' => ['auth:api', 'checkIp']], function () {
     Route::get('/user', function (Request $request) {
         return $request->user()->with('country')->find($request->user()->id);
     });
-    Route::resource('users', 'Api\UserController');
+    Route::resource('users', 'Api\UserController', ['except' => ['create', 'edit']]);
+    Route::resource('cars', 'Api\CarController', ['except' => ['create', 'edit']]);
 });
 
 Route::post('/login', 'Auth\ApiLoginController@login');
-Route::resource('cars', 'Api\CarController');
 Route::resource('countries', 'Api\CountryController', ['except' => ['create', 'edit']]);
 Route::resource('states', 'Api\StateController', ['except' => ['create', 'edit']]);
 Route::resource('regions', 'Api\RegionController', ['except' => ['create', 'edit']]);

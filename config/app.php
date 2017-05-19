@@ -235,4 +235,17 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
     ],
 
+    'repository' => [
+        'criteria' => [
+            'request' => [
+                'filters'           => 'filters',
+                'orderBy'           => 'orderBy',
+                'sortBy'            => 'sortBy',
+                'acceptConditions'  => ['=', 'like'],
+                'limit'             => 'limit',
+                'offset'            => 'offset'
+            ]
+        ]
+    ]
+
 ];

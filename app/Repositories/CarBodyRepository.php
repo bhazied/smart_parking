@@ -12,6 +12,8 @@ use App\Repositories\Contracts\BaseRepository;
 
 class CarBodyRepository extends BaseRepository
 {
+    protected $seachableField = ['name'];
+
     public function model()
     {
         return 'App\Model\CarBody';

@@ -7,6 +7,7 @@ use App\Jobs\ImageJob;
 use App\Repositories\CountryRepository;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
 use Intervention\Image\Facades\Image;
 
@@ -36,7 +37,12 @@ class CountryController extends Controller
      */
     public function index()
     {
-        return Response::json($this->countryRepository->with('users')->lists());
+        $count =  $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with(['users'])
+            ->lists(['name', 'code', 'id']);
+        return Response::json(compact('count', 'results'));
     }
 
     /**

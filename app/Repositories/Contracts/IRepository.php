@@ -30,7 +30,11 @@ interface IRepository
 
     public function with($relations);
 
+    public function count();
+
     public function scopeQuery(\Closure $scope);
 
     public function resetScope();
+
+    public function getSearchableFields();
 }

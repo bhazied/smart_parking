@@ -13,6 +13,8 @@ use App\Repositories\Criteria\AfriqueCountryCritaria;
 
 class CountryRepository extends BaseRepository
 {
+    protected $seachableField = ['name' => 'like', 'code' => 'like'];
+
     protected function model()
     {
         return 'App\Model\Country';

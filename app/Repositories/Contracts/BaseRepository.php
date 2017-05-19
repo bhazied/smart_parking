@@ -39,8 +39,15 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      * @var \Closure
      */
     protected $scopeQuery;
-
+    /**
+     * @var
+     */
     private $keyName;
+
+    /**
+     * @var array
+     */
+    protected $seachableField = [];
 
     /**
      * BaseRepository constructor.
@@ -181,7 +188,8 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
         if (!$model instanceof Model) {
             throw new RepositoryExceprion('the class '. $this->model() . ' is not an instance off Illuminate\\Database\\Eloquent\\Model');
         }
-        return $this->model = $model->newQuery();
+        //return $this->model = $model->newQuery();
+        return $this->model = $model;
     }
 
 
@@ -273,6 +281,14 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
         return $this->model->where($field, ' = ', $value)->get($columns);
     }
 
+    public function count()
+    {
+        $this->applyCriteria();
+        $this->applyScope();
+        return $this->model->count();
+    }
+
+
     /**
      * @param array $where
      */
@@ -291,5 +307,10 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     public function getModelKeyName()
     {
         return $this->keyName;
+    }
+
+    public function getSearchableFields()
+    {
+        return $this->seachableField;
     }
 }

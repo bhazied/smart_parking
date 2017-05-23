@@ -6,6 +6,8 @@ use App\Http\Requests\LanguageRequest;
 use App\Repositories\LanguageRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
 
 class LanguageController extends Controller
 {
@@ -35,7 +37,11 @@ class LanguageController extends Controller
      */
     public function store(LanguageRequest $request)
     {
-        return $this->languageRepositiry->create($request->all());
+        $inlineCount =  $this->languageRepositiry->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->languageRepositiry->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
     }
 
     /**

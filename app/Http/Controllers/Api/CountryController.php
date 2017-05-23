@@ -37,12 +37,12 @@ class CountryController extends Controller
      */
     public function index()
     {
-        $count =  $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $inlineCount =  $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
         $results = $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
             ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
             ->with(['users'])
-            ->lists(['name', 'code', 'id']);
-        return Response::json(compact('count', 'results'));
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
     }
 
     /**

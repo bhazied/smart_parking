@@ -4,8 +4,10 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,12 +47,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof  QueryException) {
+        /*if ($exception instanceof  Exception) {
             if ($request->expectsJson()) {
                 return response()->json(['error' => $exception->getMessage(), 'status' => '500'], 500);
             }
             return parent::render($request, $exception);
-        }
+        }*/
         return parent::render($request, $exception);
     }
 

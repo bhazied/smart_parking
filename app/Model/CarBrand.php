@@ -19,4 +19,9 @@ class CarBrand extends Model
     {
         return $this->hasMany('App\Model\CarModel');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Model\User::class, 'creator_user_id');
+    }
 }

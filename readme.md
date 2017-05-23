@@ -37,5 +37,25 @@ you can push teh new criteria on <strong>initRepository</strong> or in the contr
 <strong>getByCriteria</strong><br>
 ...
 
+#Request Criteria :
+<h2>filters</h2>
+exemple :<br>
+?filters[columnname]=value --> for simple usage <br>
+?filter[relation.columnname]= value --> for filter with relation.
+ <h2>limit & offset</h2>
+ use it simple juste put limit & offset on url.
+ <h2>orderBy</h2>
+ exemple :<br>
+ ?orderBy[columnname]=value --> for simple usage <br>
+ ?orderBy[relation.columnname]= value --> for filter with relation. --> we make the join for you.
+ <h2>controller exemple</h2>
+$inlineCount =  $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with(['users'])
+            ->lists();<br>
+        return Response::json(compact('inlineCount', 'results'));
+
+
 
 

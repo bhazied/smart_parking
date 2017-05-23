@@ -50,6 +50,11 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     protected $seachableField = [];
 
     /**
+     * @var array
+     */
+    private $namedCriteria = [];
+
+    /**
      * BaseRepository constructor.
      * @param App $application
      */
@@ -101,7 +106,10 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
      */
     public function getByCriteria(Criteria $criteria)
     {
-        $this->model = $criteria->apply($this->model, $this);
+        if (!in_array(get_class($criteria), $this->namedCriteria)) {
+            $this->model = $criteria->apply($this->model, $this);
+            array_push($this->namedCriteria, get_class($criteria));
+        }
         $result =  $this->model->get();
         return $result;
     }
@@ -117,7 +125,10 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
         if (! $criteria instanceof Criteria) {
             throw new RepositoryExceprion('the class '. get_class($criteria) . ' is not an instance off App\\Contract\\Criteria');
         }
-        $this->criteria->push($criteria);
+        if (!in_array(get_class($criteria), $this->namedCriteria)) {
+            array_push($this->namedCriteria, get_class($criteria));
+            $this->criteria->push($criteria);
+        }
         return $this;
     }
 
@@ -221,7 +232,9 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     public function lists($columns = ['*'])
     {
         $this->applyCriteria();
-        return $this->model->get($columns);
+        $results = $this->model->get($columns);
+        $this->getModel();
+        return $results;
     }
 
     /**
@@ -285,7 +298,9 @@ abstract class BaseRepository implements IRepository, IRepositoryCriteria
     {
         $this->applyCriteria();
         $this->applyScope();
-        return $this->model->count();
+        $count = $this->model->count();
+        $this->getModel();
+        return $count;
     }
 
 

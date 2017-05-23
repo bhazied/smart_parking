@@ -18,15 +18,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => ['auth:api', 'checkIp']], function () {
+Route::group(['middleware' => ['auth:api', 'autrhorization']], function () {
     Route::get('/user', function (Request $request) {
         return $request->user()->with('country')->find($request->user()->id);
     });
-    Route::resource('users', 'Api\UserController', ['except' => ['create', 'edit']]);
-    Route::resource('cars', 'Api\CarController', ['except' => ['create', 'edit']]);
+    Route::get('userss', [
+        'uses' => 'Api\UserController@index',
+        'roles' => ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']
+    ]);
+    Route::resource('users', 'Api\UserController');
+    Route::resource('cars', 'Api\CarController', ['only' => 'create', 'edit', 'delete']);
 });
 
 Route::post('/login', 'Auth\ApiLoginController@login');
+Route::resource('cars', 'Api\CarController', ['only' => 'index']);
 Route::resource('countries', 'Api\CountryController', ['except' => ['create', 'edit']]);
 Route::resource('states', 'Api\StateController', ['except' => ['create', 'edit']]);
 Route::resource('regions', 'Api\RegionController', ['except' => ['create', 'edit']]);

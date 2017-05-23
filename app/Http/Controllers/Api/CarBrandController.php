@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\CarBrandRequest;
 use App\Repositories\CarBrandRepository;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class CarBrandController extends Controller
@@ -26,7 +28,12 @@ class CarBrandController extends Controller
      */
     public function index()
     {
-        return $this->carBrandRepository->lists();
+        $inlineCount =  $this->carBrandRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->carBrandRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with(['carModels'])
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
     }
 
     /**

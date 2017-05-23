@@ -8,6 +8,7 @@
 
 namespace App\Repositories;
 
+use App\Model\Country;
 use App\Repositories\Contracts\BaseRepository;
 use App\Repositories\Criteria\AfriqueCountryCritaria;
 
@@ -17,7 +18,8 @@ class CountryRepository extends BaseRepository
 
     protected function model()
     {
-        return 'App\Model\Country';
+        //   return 'App\Model\Country';
+        return Country::class;
     }
 
     public function initRepository()

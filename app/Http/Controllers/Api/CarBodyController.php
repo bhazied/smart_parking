@@ -6,6 +6,8 @@ use App\Http\Requests\CarBodyRequest;
 use App\Repositories\CarBodyRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
 
 class CarBodyController extends Controller
 {
@@ -27,6 +29,11 @@ class CarBodyController extends Controller
      */
     public function index()
     {
+        $inlineCount =  $this->carBodyRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->carBodyRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
         return $this->carBodyRepository->with(['cars'])->lists();
     }
 

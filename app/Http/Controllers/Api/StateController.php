@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\StateRequest;
 use App\Model\State;
 use App\Repositories\StateRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+//use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\App;
 
 class StateController extends Controller
@@ -25,7 +26,12 @@ class StateController extends Controller
      */
     public function index()
     {
-        return $this->stateRepository->with(['country', 'region'])->lists();
+        $inlineCount =  $this->stateRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->stateRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with(['country', 'region'])
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
     }
     
     /**

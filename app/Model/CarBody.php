@@ -14,4 +14,9 @@ class CarBody extends Model
     {
         return $this->hasMany('App\Model\Car');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Model\User::class, 'creator_user_id');
+    }
 }

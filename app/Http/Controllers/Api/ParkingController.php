@@ -6,6 +6,8 @@ use App\Http\Requests\ParkingRequest;
 use App\Repositories\ParkingRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
 
 class ParkingController extends Controller
 {
@@ -27,6 +29,12 @@ class ParkingController extends Controller
      */
     public function index()
     {
+        $inlineCount =  $this->parkingRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->parkingRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with(['states', 'regions'])
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
         return $this->parkingRepository->with(['states', 'regions'])->lists();
     }
 

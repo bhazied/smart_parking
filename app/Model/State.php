@@ -17,4 +17,9 @@ class State extends Model
     {
         return $this->belongsTo('App\Model\Country');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Model\User::class, 'creator_user_id');
+    }
 }

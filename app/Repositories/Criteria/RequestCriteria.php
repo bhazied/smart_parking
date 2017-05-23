@@ -11,6 +11,7 @@ namespace app\Repositories\Criteria;
 use App\Repositories\Contracts\Criteria;
 use App\Repositories\Contracts\IRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class RequestCriteria extends Criteria
 {
@@ -37,6 +38,7 @@ class RequestCriteria extends Criteria
         $searchableFields = $repository->getSearchableFields();
         $isFirstField = true;
         $forcedAnd = true;
+        /* add soem where clause */
         if (is_array($filters) && count($filters)) {
             $model = $model->where(function ($query) use ($filters, $orderBy, $searchableFields, $isFirstField, $forcedAnd) {
                 foreach ($filters as $field => $value) {
@@ -56,13 +58,12 @@ class RequestCriteria extends Criteria
                         $explode = explode('.', $field);
                         $field = array_pop($explode);
                         $relation = implode('.', $explode);
-                        $relation = $relation.'s';
+                        //$relation = Str::plural($relation);
                     }
                     $modelTableName = $query->getModel()->getTable();
                     if ($isFirstField || $forcedAnd) {
                         if (!is_null($value)) {
                             if (!is_null($relation)) {
-                                //dd($relation, $field, $condition, $value);
                                 if (!is_numeric($value)) {
                                     $condition = 'like';
                                     $value = '%'.$value.'%';
@@ -90,6 +91,7 @@ class RequestCriteria extends Criteria
                 }
             });
         }
+        /* Order By Clause */
         if (is_array($orderBy) && count($orderBy)) {
             $table = $model->getModel()->getTable();
             $keyName = '';
@@ -100,20 +102,18 @@ class RequestCriteria extends Criteria
                     $sortedColumn = array_pop($explode);
                     $joinTable = implode('.', $explode);
                     $keyName = $this->getForeignKeyName($joinTable);
-                    $joinTable = $joinTable.'s';
+                    $joinTable = Str::plural($joinTable);
+                    //dd($joinTable, $keyName, $sortedColumn, $sortedBy, $table);
                     $model = $model->leftJoin($joinTable, $table.'.'.$keyName, '=', $joinTable.'.id')
                         ->orderBy($joinTable.'.'.$sortedColumn, $sortedBy)
                         ->select($table.'.*');
+                    //dd($model);
                 } else {
                     $sortedColumn = $attribute;
                     $model->orderBy($sortedColumn, $sortedBy);
                 }
             }
         }
-        if ($with) {
-            $model->with($with);
-        }
-
         return $model;
     }
 
@@ -121,11 +121,13 @@ class RequestCriteria extends Criteria
     {
         $foreignKey = [
             'user' => 'creator_user_id',
+            'car_brand' => 'car_brand_id',
+            'car_model' => 'car_model_id'
         ];
         if (isset($foreignKey[$joinTable])) {
             return $foreignKey[$joinTable];
         } else {
-            return $joinTable.'s'.'.'.$joinTable.'_id';
+            return Str::plural($joinTable).'.'.$joinTable.'_id';
         }
     }
 }

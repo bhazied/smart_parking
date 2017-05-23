@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\RegionRequest;
 use App\Repositories\RegionRepository;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
 
 /**
  * Class RegionController
@@ -35,7 +35,12 @@ class RegionController extends Controller
      */
     public function index()
     {
-        return $this->regionrpository->with('states')->lists();
+        $inlineCount =  $this->regionrpository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->regionrpository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with('states')
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
     }
 
     /**

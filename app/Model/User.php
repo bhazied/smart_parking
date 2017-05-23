@@ -37,4 +37,35 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Model\Car', 'creator_user_id');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
+
+
+    public function hasAnyRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if ($this->hasRole($role)) {
+                    return true;
+                }
+            }
+        } else {
+            if ($this->hasRole($roles)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function hasRole($role)
+    {
+        $role = $this->roles()->where('name', $role)->first();
+        if ($role) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\app\Model\User;
+use App\Model\User;
 use App\Http\Requests\UserRequest;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
@@ -33,7 +33,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        return Response::json($this->userRepository->lists());
+        $inlineCount =  $this->userRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
+        $results = $this->userRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
+            ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
+            ->with(['countries', 'cars'])
+            ->lists();
+        return Response::json(compact('inlineCount', 'results'));
     }
 
     /**
@@ -59,10 +64,10 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\app\Model\User  $user
+     * @param  \App\Model\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(\App\Model\User $user)
     {
         return Response::json($this->userRepository->find($user->id));
     }
@@ -70,7 +75,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\app\Model\User  $user
+     * @param  \App\Model\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -92,7 +97,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\app\Model\User  $user
+     * @param  \App\Model\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)

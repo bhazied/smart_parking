@@ -27,13 +27,13 @@ class Authorize
                     in_array(Str::lower($request->method()), $security['method'])
                 ) {
                     if (!$this->verifyRole($security['roles'], $request)) {
-                        return Response::json(['message' => 'not authorise', 'code'=> 401]);
+                        return response('not autorize', 403);
                     }
                     return $next($request);
                 }
             }
         }
-        return Response::json(['message' => 'not authorise', 'code'=> 401]);
+        return response('not autorize', 403);
     }
 
     private function verifyRole($roles, Request $request)

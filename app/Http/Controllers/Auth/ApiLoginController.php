@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
+use Psy\Util\Json;
 
 class ApiLoginController extends Controller
 {
@@ -33,6 +34,21 @@ class ApiLoginController extends Controller
 
         $proxy = Request::create('oauth/token', 'POST');
         $response =  Route::dispatch($proxy);
-        return $response;
+       //return $response;
+        $currentUser = \App\Model\User::where('email', $request->username)->with('roles')->first();
+        $responseAsArray = json_decode($response->getcontent(), true);
+        $currentUser =  ['user' => $this->parseUser($currentUser)];
+        $endResponse = array_merge($responseAsArray, $currentUser);
+        return $endResponse;
+    }
+
+    private function parseUser($user)
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->list_role
+        ];
     }
 }

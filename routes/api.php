@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Route;
 
 /*
@@ -24,26 +25,19 @@ Route::resource('car_bodies', 'Api\CarBodyController', ['only' => 'index']);
 Route::resource('car_models', 'Api\CarModelController', ['only' => 'index']);
 Route::resource('car_brands', 'Api\CarBrandController', ['only' => 'index']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->get('/profile', function () {
+    return Auth::user();
 });
 
 Route::group(['middleware' => ['auth:api', 'autrhorization']], function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user()->with('country')->find($request->user()->id);
-    });
-    Route::get('userss', [
-        'uses' => 'Api\UserController@index',
-        'roles' => ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']
-    ]);
     Route::resource('users', 'Api\UserController');
     Route::resource('cars', 'Api\CarController');
-    Route::resource('countries', 'Api\CountryController');
-    Route::resource('states', 'Api\StateController');
-    Route::resource('regions', 'Api\RegionController');
-    Route::resource('languages', 'Api\LanguageController', ['only' => ['create'] ]);
-    Route::resource('parkings', 'Api\ParkingController');
-    Route::resource('car_bodies', 'Api\CarBodyController');
-    Route::resource('car_models', 'Api\CarModelController');
-    Route::resource('car_brands', 'Api\CarBrandController');
+    Route::resource('countries', 'Api\CountryController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('states', 'Api\StateController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('regions', 'Api\RegionController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('languages', 'Api\LanguageController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('parkings', 'Api\ParkingController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('car_bodies', 'Api\CarBodyController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('car_models', 'Api\CarModelController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
+    Route::resource('car_brands', 'Api\CarBrandController', ['only' => ['create', 'update', 'destroy', 'show'] ]);
 });

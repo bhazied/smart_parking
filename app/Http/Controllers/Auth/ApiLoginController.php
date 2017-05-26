@@ -34,7 +34,6 @@ class ApiLoginController extends Controller
 
         $proxy = Request::create('oauth/token', 'POST');
         $response =  Route::dispatch($proxy);
-       //return $response;
         $currentUser = \App\Model\User::where('email', $request->username)->with('roles')->first();
         $responseAsArray = json_decode($response->getcontent(), true);
         $currentUser =  ['user' => $this->parseUser($currentUser)];

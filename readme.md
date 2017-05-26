@@ -1,60 +1,76 @@
-<p align="center">API REST Setup & Repostory pattern</p>
+#API REST Setup & Repository pattern
 
-<p align="center">
-nothing to put
-</p>
 
 
 ## License
 
 Without License
-<ul>
-<li>first install the project with composer</li>
-<li> generate --> php artisan key:generate if is not generated </li>
-<li>show or reconfigure the file grumphp.yml</li>
-<li>execute artisan migrate plz refer to https://laravel.com/docs/5.4/passport</li>
-<li>php artisan passport:keys</li>
-<li>execute artisan passport:install  </li>
-</ul>
+##Installation
+* first install the project with composer with all dependencies ( dev + requires)
+* generate --> php artisan key:generate if is not generated
+* show or reconfigure the file grumphp.yml 
+* execute artisan migrate  if you should use the same databse in this exemple
+* for the Auth refere to [Passport - laravel](https://laravel.com/docs/5.4/passport)
+* php artisan passport:keys
+* execute artisan passport:install
 
 
-<h2> working with Repositories </h2>
+##working with Repositories
+
 To create a new Repository refer to exemple CountryRepository :
-this class must extend from Baserepository and must redifine the <strong>model</strong> function to inject the model
+this class must extend from Baserepository and must redifine the **model** function to inject the model
 wanted.
-<br>
-<ul>
-<li> create a new controller : php artisant make:controller --resource</li>
-<li> inject you repository in construct </li>
-<li> create route in routes\api.php like this :Route::resource('countries', 'Api\CountryController'); </li>
-</ul>
-<br>
-Also you can create a spécifique criteria and use it on extra, for that refer to App\Repositories\Criteria\
+
+* create a new controller :
+ ``` php artisant make:controller --resource --model=<modelName> ```
+* inject you repository in construct (dynamic laravel injection, we don't need too intialize to provider) 
+* create route in routes\api.php like this :Route::resource('countries', 'Api\CountryController');
+* Also you can create a specifique criteria and use it on extra, for that refer to App\Repositories\Criteria\
 and App\Repositories\CountryRepository
-<br>
-you can push teh new criteria on <strong>initRepository</strong> or in the controller by using thsi method below <br>
-<strong>pushCriteria</strong><br>
-<strong>getByCriteria</strong><br>
+* you can push teh new criteria on **initRepository** or in the controller by using thsi method below <br>
+**pushCriteria**
+**getByCriteria**
 ...
 
-#Request Criteria :
-<h2>filters</h2>
-exemple :<br>
+##Request Criteria :
+###filters
+exemple:
+
 ?filters[columnname]=value --> for simple usage <br>
 ?filter[relation.columnname]= value --> for filter with relation.
- <h2>limit & offset</h2>
+ ###limit & offset
  use it simple juste put limit & offset on url.
- <h2>orderBy</h2>
- exemple :<br>
+ ###orderBy
+ exemple:
+
  ?orderBy[columnname]=value --> for simple usage <br>
  ?orderBy[relation.columnname]= value --> for filter with relation. --> we make the join for you.
- <h2>controller exemple</h2>
+ ###controller exemple
+ ```php
 $inlineCount =  $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))->count();
         $results = $this->countryRepository->pushCriteria(App::make('\App\Repositories\Criteria\RequestCriteria'))
             ->pushCriteria(App::make('\App\Repositories\Criteria\PagerCriteria'))
             ->with(['users'])
             ->lists();<br>
         return Response::json(compact('inlineCount', 'results'));
+```
+##Security
+you can view the Authorize middleware based on the config/security.php configuration
+
+the objectif is to make ACL dynamic with this Rest Api by action, by role and by HttpVerb.
+
+NB : the uri must be sorround with ^ and $ to be used in regular expression after in the middleware.
+
+in the api.php ( file to configure the route api ), don't forget to use the autrhorization middleware as it's named in
+Http/kernel.php exactly in the  $routeMiddlewar as bellow
+
+```php
+ protected $routeMiddleware = [
+        ...
+        'autrhorization' => \App\Http\Middleware\Authorize::class
+        ...
+    ];
+```
 
 
 

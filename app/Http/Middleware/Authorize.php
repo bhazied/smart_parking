@@ -24,16 +24,16 @@ class Authorize
             foreach (config('security.access_controle') as $security) {
                 if (
                     preg_match('#'.$security['uri'].'#', $request->route()->uri()) &&
-                    in_array(Str::lower($request->method()), $security['method'])
+                    $this->allowMethod($request->method(), $security['method'])
                 ) {
                     if (!$this->verifyRole($security['roles'], $request)) {
-                        return response('not autorize', 403);
+                        return response('forbidden Access', 403);
                     }
                     return $next($request);
                 }
             }
         }
-        return response('not autorize', 403);
+        return response('forbidden Access', 403);
     }
 
     private function verifyRole($roles, Request $request)
@@ -42,5 +42,13 @@ class Authorize
             return true;
         }
         return false;
+    }
+
+    private function allowMethod($httpVerb, $allowMethods)
+    {
+        if (is_array($allowMethods)) {
+            return in_array(Str::lower($httpVerb, $allowMethods));
+        }
+        return (Str::lower($httpVerb) == $allowMethods);
     }
 }

@@ -15,6 +15,11 @@ use \Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/register', 'Auth\RegisterController@register');
+Route::get('/confirm/{id}/{token}', 'Auth\ApiLoginController@confirm');
+Route::post('/oauth/token', [
+    'uses' => 'Api\CustomAccessTokenController@issueUserToken'
+]);
 Route::post('/login', 'Auth\ApiLoginController@login');
 Route::resource('countries', 'Api\CountryController', ['only' => 'index']);
 Route::resource('states', 'Api\StateController', ['only' => 'index']);

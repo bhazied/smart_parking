@@ -246,6 +246,10 @@ return [
                 'offset'            => 'offset'
             ]
         ]
+    ],
+
+    'register' => [
+        'token_tll' => 88400
     ]
 
 ];

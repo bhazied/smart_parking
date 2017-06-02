@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
+use App\Notifications\registredUser;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -27,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    //protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -37,6 +41,21 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(UserRequest $request)
+    {
+        $user = $this->create($request->all());
+        event(new Registered($user));
+        $user->notify(new registredUser());
+        return Response::json($user);
     }
 
     /**
@@ -51,6 +70,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'country_id' => 'required|numeric|exists:countries,id'
         ]);
     }
 
@@ -62,10 +82,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return \App\Model\User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'country_id' => $data['country_id'],
+            'confirmation_token' => Str::random(120)
         ]);
     }
 }
